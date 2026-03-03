@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Sonic Field — Spotify Auth</title>
+<style>
+  body { background:#030508; color:#00ffe5; font-family:monospace;
+         display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+  p { font-size:0.8rem; letter-spacing:0.15em; opacity:0.6; }
+</style>
+</head>
+<body>
+<p>AUTHORIZING... CLOSING WINDOW</p>
+<script>
+  // Grab the code (or error) from the URL Spotify redirected to
+  const params = new URLSearchParams(window.location.search);
+  const code   = params.get('code');
+  const error  = params.get('error');
+
+  if (code) {
+    // Write code to localStorage so the visualizer page can pick it up
+    localStorage.setItem('sf_oauth_code', code);
+    localStorage.setItem('sf_oauth_ts',   Date.now().toString());
+  } else if (error) {
+    localStorage.setItem('sf_oauth_error', error);
+  }
+
+  // Close this tab/popup after a brief moment
+  setTimeout(() => window.close(), 800);
+</script>
+</body>
+</html>
