@@ -10,20 +10,18 @@
 <body>
 <p>AUTHORIZING... CLOSING WINDOW</p>
 <script>
-  // Grab the code (or error) from the URL Spotify redirected to
   const params = new URLSearchParams(window.location.search);
   const code   = params.get('code');
   const error  = params.get('error');
 
-  if (code) {
-    // Write code to localStorage so the visualizer page can pick it up
-    localStorage.setItem('sf_oauth_code', code);
-    localStorage.setItem('sf_oauth_ts',   Date.now().toString());
-  } else if (error) {
-    localStorage.setItem('sf_oauth_error', error);
+  if (window.opener) {
+    // Send code back to the visualizer window via postMessage
+    window.opener.postMessage(
+      { type: 'sf_spotify_callback', code: code || null, error: error || null },
+      '*'
+    );
   }
 
-  // Close this tab/popup after a brief moment
   setTimeout(() => window.close(), 800);
 </script>
 </body>
